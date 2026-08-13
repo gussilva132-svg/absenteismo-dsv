@@ -13,7 +13,7 @@
 <div class="modal" id="am"><div class="box"><h2 id="atitle">Registrar ausência</h2><div class="grid"><div class="field"><label>Data *</label><input type="date" class="ctl" id="adate"></div><div class="field"><label>Colaborador *</label><select class="ctl" id="aemp"></select></div><div class="field full"><label>Motivo *</label><select class="ctl" id="areason"></select></div><div class="field"><label>Dias perdidos</label><input type="number" min="0" step="0.5" class="ctl" id="adays"></div><div class="field"><label>Horas perdidas</label><input type="number" min="0" step="0.5" class="ctl" id="ahours"></div><div class="field full"><label>Observação</label><textarea class="ctl" id="aobs"></textarea></div></div><div class="actions"><button class="btn out" onclick="closeM('am')">Cancelar</button><button class="btn" onclick="saveAbs()">Salvar</button></div></div></div><div class="toast" id="toast"></div>
 <script>
 const SUPABASE_URL='https://uuvlnqblynxvtekpxvuy.supabase.co';
-const SUPABASE_PUBLISHABLE_KEY='COLE_AQUI_SUA_CHAVE_SB_PUBLISHABLE';
+const SUPABASE_PUBLISHABLE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV1dmxucWJseW54dnRla3B4dnV5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY1NjgwODUsImV4cCI6MjEwMjE0NDA4NX0.TFxS9PXYMCdlq3ufwO6HBHEYTy0vitCFFMkgJNQd6kY';
 const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);
 const R=['Atestado','Falta Injustificada','INSS','Licença Médica','Licença Maternidade','Licença Paternidade','Acidente de Trabalho','Folga','Outros'];
 let E=[],A=[],ee=null,aa=null;
