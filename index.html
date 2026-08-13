@@ -60,10 +60,9 @@ async function resetPassword(){const email=$('loginEmail').value.trim();if(!emai
 function showLogin(){currentUser=currentProfile=null;$('app').classList.add('hidden');$('loginPage').classList.remove('hidden')}
 async function startSession(session){if(!session?.user)return showLogin();currentUser=session.user;const {data,error} = await db
   .from('perfis')
-  .select('*');
-
-console.log("PERFIS", data);
-console.log("ERRO", error);if(error||!data||!data.ativo){await db.auth.signOut();showLogin();$('loginMsg').textContent=error?'Erro ao validar perfil: '+error.message:'Usuario sem perfil ativo. Solicite acesso ao administrador.';return}currentProfile=data;$('loginPage').classList.add('hidden');$('app').classList.remove('hidden');applyPermissions();await loadAll()}
+  .select('*')
+  .eq('id', currentUser.id)
+  .maybeSingle();if(error||!data||!data.ativo){await db.auth.signOut();showLogin();$('loginMsg').textContent=error?'Erro ao validar perfil: '+error.message:'Usuario sem perfil ativo. Solicite acesso ao administrador.';return}currentProfile=data;$('loginPage').classList.add('hidden');$('app').classList.remove('hidden');applyPermissions();await loadAll()}
 function applyPermissions(){$('userName').textContent=currentProfile.nome;$('userRole').textContent='Perfil: '+currentProfile.perfil.toUpperCase();document.querySelectorAll('.admin-only').forEach(x=>x.classList.toggle('hidden',!isAdmin()));document.querySelectorAll('.edit-only').forEach(x=>x.classList.toggle('hidden',!canEdit()));if(!canEdit()&&$('registro').classList.contains('on'))openPanel('resumo')}
 async function loadAll(){try{setBusy(true);const requests=[db.from('colaboradores').select('*').order('id'),db.from('ausencias').select('*').order('data',{ascending:false})];if(isAdmin())requests.push(db.from('perfis').select('*').order('nome'));const rs=await Promise.all(requests);rs.forEach(r=>{if(r.error)throw r.error});E=(rs[0].data||[]).map(x=>({id:String(x.id),matricula:x.Matricula??x.matricula??'',nome:x.Nome??x.nome??'',cargo:x.Cargo??x.cargo??'',gestor:x.Gestor??x.gestor??'',area:x.Area??x.area??'',turno:x.Turno??x.turno??'',status:x.Status??x.status??'Ativo'}));A=(rs[1].data||[]).map(x=>({id:String(x.id),data:x.data,funcionarioId:String(x.colaborador_id),motivo:x.motivo,dias:Number(x.dias||0),horas:Number(x.horas||0),obs:x.observacao||''}));P=isAdmin()?(rs[2].data||[]):[];render()}catch(e){console.error(e);msg('Erro ao carregar: '+(e.message||e))}finally{setBusy(false)}}
 function bounds(){let n=new Date(),day=n.getDay()||7,ws=new Date(n);ws.setDate(n.getDate()-day+1);return{today:today(),week:iso(ws),month:iso(new Date(n.getFullYear(),n.getMonth(),1))}}
